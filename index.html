@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIX DAY - Prototipando a Quebrada</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Configuração de Estilos Personalizados -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paqBlack: '#000000',
+                        paqWhite: '#FFFFFF',
+                        paqBlue: '#2596be', /* Azul elétrico sólido */
+                        paqDarkBlue: '#0033CC',
+                        paqGray: '#121212'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Space Mono', 'monospace'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #000000;
+            color: #FFFFFF;
+        }
+        
+        /* Design High Contrast / Brutalista */
+        .solid-panel {
+            background-color: #000000;
+            border: 1px solid #333;
+        }
+
+        .btn-primary {
+            background-color: #0047FF;
+            color: white;
+            transition: all 0.2s ease;
+            border: 2px solid #0047FF;
+        }
+
+        .btn-primary:hover {
+            background-color: #000000;
+            color: #0047FF;
+            box-shadow: 4px 4px 0px #ffffff;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid #FFFFFF;
+            color: #FFFFFF;
+        }
+
+        .btn-outline:hover {
+            background-color: #FFFFFF;
+            color: #000000;
+        }
+
+        /* Barra listrada estilo "warning" mas com cores da marca */
+        .progress-bar-striped {
+            background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+            background-size: 1rem 1rem;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="antialiased selection:bg-paqBlue selection:text-white">
+
+    <!-- BARRA DE URGÊNCIA -->
+    <div class="bg-white text-black text-center py-3 px-4 font-mono text-sm md:text-base font-bold sticky top-0 z-50 border-b-4 border-paqBlue">
+        <span class="uppercase tracking-tighter"><i class="fa-solid fa-clock mr-2"></i>META EM TEMPO REAL:</span>
+        <span id="countdown" class="bg-black text-white px-2 py-1 ml-2 font-bold">CARREGANDO...</span>
+    </div>
+
+    <!-- HERO SECTION -->
+    <header class="relative container mx-auto px-6 py-16 md:py-24 flex flex-col items-center text-center">
+        <!-- Logo -->
+        <div class="mb-10">
+            <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-white">
+                PAQ<span class="text-paqBlue">.</span>
+            </h1>
+            <div class="h-1 w-full bg-white mt-2"></div>
+            <p class="text-sm font-mono font-bold text-paqBlue mt-2 uppercase tracking-[0.3em]">Prototipando a Quebrada</p>
+        </div>
+
+        <h2 class="text-3xl md:text-5xl font-bold mb-8 leading-tight max-w-4xl">
+            A tecnologia é nossa. <br>
+            <span class="text-paqBlue bg-white px-2">O futuro é agora.</span>
+        </h2>
+
+        <p class="text-gray-300 text-lg md:text-xl max-w-2xl mb-10 leading-relaxed font-mono">
+            Hoje é dia de injetar futuro na periferia. PIX DAY para garantir laboratórios e formação de novos devs.
+        </p>
+
+        <a href="#pix-section" class="btn-primary px-10 py-5 text-xl font-bold font-mono uppercase tracking-wider inline-flex items-center gap-3">
+            <i class="fa-brands fa-pix"></i> Participar do Pix Day
+        </a>
+    </header>
+
+    <!-- O PIXÔMETRO -->
+    <section class="container mx-auto px-6 mb-20">
+        <div class="solid-panel p-8 max-w-4xl mx-auto border-2 border-white relative">
+            <!-- Detalhe decorativo -->
+            <div class="absolute top-0 right-0 w-8 h-8 bg-paqBlue"></div>
+            <div class="absolute bottom-0 left-0 w-8 h-8 bg-paqBlue"></div>
+
+            <div class="flex flex-col md:flex-row justify-between items-end mb-4 gap-4">
+                <span class="text-white font-mono font-bold uppercase text-xl flex items-center">
+                    <span class="w-3 h-8 bg-paqBlue mr-3 inline-block"></span>
+                    Meta do Dia
+                </span>
+                <span class="text-white font-black text-3xl">R$ 6.450 <span class="text-sm text-gray-500 font-normal block md:inline">/ R$ 10.000</span></span>
+            </div>
+            
+            <div class="w-full bg-gray-900 border border-gray-700 h-10 relative">
+                <!-- Barra de progresso -->
+                <div class="bg-paqBlue h-full progress-bar-striped transition-all duration-1000 ease-out flex items-center justify-end pr-2" style="width: 64%">
+                    <span class="text-white font-bold text-xs bg-black px-1">64%</span>
+                </div>
+            </div>
+            
+            <!-- Milestones -->
+            <div class="grid grid-cols-3 gap-px mt-4 bg-gray-800 border border-gray-800">
+                <div class="bg-black p-2 text-center">
+                    <div class="text-[10px] uppercase text-gray-500 font-mono mb-1">Meta 1</div>
+                    <div class="text-xs md:text-sm font-bold text-white">R$ 2k Internet</div>
+                </div>
+                <div class="bg-black p-2 text-center">
+                    <div class="text-[10px] uppercase text-paqBlue font-mono mb-1">Meta 2</div>
+                    <div class="text-xs md:text-sm font-bold text-white">R$ 5k Bolsas</div>
+                </div>
+                <div class="bg-black p-2 text-center opacity-50">
+                    <div class="text-[10px] uppercase text-gray-500 font-mono mb-1">Meta 3</div>
+                    <div class="text-xs md:text-sm font-bold text-white">R$ 10k PCs</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IMPACTO (Grid estilo brutalista) -->
+    <section class="bg-white text-black py-20">
+        <div class="container mx-auto px-6">
+            <div class="flex items-center mb-12">
+                <i class="fa-solid fa-square text-paqBlue mr-4 text-2xl"></i>
+                <h3 class="text-3xl font-black uppercase tracking-tighter">O Impacto Real</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="border-4 border-black p-8 hover:bg-black hover:text-white transition duration-300 group">
+                    <div class="text-5xl font-black mb-4 text-paqBlue group-hover:text-white transition">+500</div>
+                    <h4 class="text-xl font-bold mb-2 uppercase">Jovens Impactados</h4>
+                    <p class="font-mono text-sm leading-relaxed">Pessoas reais com novas perspectivas através dos programas de Imersão e Aceleração.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="border-4 border-black p-8 hover:bg-black hover:text-white transition duration-300 group">
+                    <div class="text-5xl font-black mb-4 text-paqBlue group-hover:text-white transition">50%</div>
+                    <h4 class="text-xl font-bold mb-2 uppercase">Empregabilidade</h4>
+                    <p class="font-mono text-sm leading-relaxed">Dos nossos alunos já estão atuando dentro de empresas de tecnologia.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="border-4 border-black p-8 hover:bg-black hover:text-white transition duration-300 group">
+                    <div class="text-5xl font-black mb-4 text-paqBlue group-hover:text-white transition">780k</div>
+                    <h4 class="text-xl font-bold mb-2 uppercase">Reais Injetados</h4>
+                    <p class="font-mono text-sm leading-relaxed">Dinheiro que volta pra quebrada através dos salários dos jovens formados.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AREA DE AÇÃO -->
+    <section id="pix-section" class="bg-paqBlack py-20 border-t border-white/10">
+        <div class="container mx-auto px-4">
+            
+            <div class="max-w-lg mx-auto">
+                
+                <!-- ESTADO 1: FORMULÁRIO -->
+                <div id="lead-form-container" class="border border-white bg-paqBlack p-8 md:p-10 relative">
+                    <!-- Cantoneiras decorativas -->
+                    <div class="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-paqBlue"></div>
+                    <div class="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-paqBlue"></div>
+
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-black text-white uppercase mb-2">Faça Parte</h3>
+                        <div class="h-1 w-12 bg-paqBlue mx-auto mb-4"></div>
+                        <p class="text-gray-400 font-mono text-sm">Cadastre-se para liberar a chave PIX e receber o relatório financeiro desta ação.</p>
+                    </div>
+
+                    <form id="paq-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                        <div class="space-y-1">
+                            <label for="name" class="block text-xs font-bold uppercase tracking-wider text-white">Seu Nome / Vulgo</label>
+                            <input type="text" id="name" required class="w-full bg-white text-black font-bold border-none px-4 py-4 focus:ring-4 focus:ring-paqBlue/50 outline-none" placeholder="Digite seu nome">
+                        </div>
+                        
+                        <div class="space-y-1">
+                            <label for="contact" class="block text-xs font-bold uppercase tracking-wider text-white">WhatsApp ou Email</label>
+                            <input type="text" id="contact" required class="w-full bg-white text-black font-bold border-none px-4 py-4 focus:ring-4 focus:ring-paqBlue/50 outline-none" placeholder="Seu contato">
+                        </div>
+
+                        <button type="submit" class="w-full btn-primary py-4 font-black uppercase tracking-widest text-lg">
+                            Liberar Chave PIX <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- ESTADO 2: PIX REVEAL -->
+                <div id="pix-display-container" class="hidden border-2 border-paqBlue bg-paqBlack p-8 md:p-10 text-center relative">
+                    
+                    <div class="mb-8">
+                        <h3 class="text-3xl font-black text-white uppercase italic">É nós por nós!</h3>
+                        <p class="text-paqBlue font-mono font-bold mt-2">DADOS DE DOAÇÃO LIBERADOS</p>
+                    </div>
+
+                    <div class="bg-white p-4 inline-block mb-8">
+                        <!-- QR Code -->
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126580014BR.GOV.BCB.PIX013643.213.521/0001-305204000053039865802BR5925PROTOTIPANDO A QUEBRADA6012FLORIANOPOLIS62070503***63041D3D" alt="QR Code Pix" class="w-48 h-48 mx-auto">
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-gray-900 border border-gray-700 p-3 font-mono text-xs text-gray-400 break-all">
+                            00020126580014BR.GOV.BCB.PIX013643.213.521/0001-30...
+                        </div>
+                        
+                        <button onclick="copyPix()" id="copy-btn" class="w-full bg-paqBlue hover:bg-white hover:text-paqBlue text-white font-black py-4 border-2 border-paqBlue transition-all duration-200 uppercase flex items-center justify-center gap-2">
+                            <i class="fa-regular fa-copy"></i>
+                            <span>COPIAR CÓDIGO PIX</span>
+                        </button>
+                        
+                        <p class="text-xs font-mono text-gray-500 mt-4">CHAVE CNPJ: 43.213.521/0001-30<br>Assoc. Prototipando a Quebrada</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- DEPOIMENTOS -->
+    <section class="py-16 bg-white text-black border-t-8 border-paqBlue">
+        <div class="container mx-auto px-6">
+            <h3 class="font-black text-2xl uppercase mb-8 border-l-8 border-black pl-4">A Voz da Comunidade</h3>
+            
+            <div class="flex flex-col md:flex-row gap-8">
+                <!-- Depoimento 1 -->
+                <div class="bg-gray-100 p-8 border-l-4 border-paqBlue">
+                    <p class="font-mono text-sm mb-6 leading-relaxed">"PAQ é força, resiliência, aprendizado... É onde erramos, acertamos e seguimos juntos. PAQ é sinônimo de família."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-black text-white flex items-center justify-center font-bold">I</div>
+                        <div>
+                            <p class="font-bold text-sm uppercase">Igor Rohrig</p>
+                            <p class="text-xs text-paqBlue font-bold">Educando</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Depoimento 2 -->
+                <div class="bg-gray-100 p-8 border-l-4 border-paqBlue">
+                    <p class="font-mono text-sm mb-6 leading-relaxed">"Fico o dia inteiro pensando na hora de chegar na unidade. O PAQ está sendo uma experiência incrível."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-black text-white flex items-center justify-center font-bold">A</div>
+                        <div>
+                            <p class="font-bold text-sm uppercase">André Moraes</p>
+                            <p class="text-xs text-paqBlue font-bold">Imersão</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-black text-white py-12 border-t border-gray-800">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-6 md:mb-0 text-center md:text-left">
+                <p class="text-3xl font-black tracking-tighter mb-1">PAQ<span class="text-paqBlue">.</span></p>
+                <p class="text-gray-500 text-xs font-mono uppercase">Prototipando a Quebrada © 2024</p>
+            </div>
+            
+            <div class="flex gap-6 text-2xl">
+                <a href="#" class="hover:text-paqBlue transition"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="hover:text-paqBlue transition"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#" class="hover:text-paqBlue transition"><i class="fa-solid fa-globe"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- 1. LÓGICA DO FORMULÁRIO ---
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const contact = document.getElementById('contact').value;
+            
+            if(name && contact) {
+                const formContainer = document.getElementById('lead-form-container');
+                const pixContainer = document.getElementById('pix-display-container');
+                
+                formContainer.classList.add('hidden');
+                pixContainer.classList.remove('hidden');
+                
+                // Animação simples de entrada
+                pixContainer.classList.add('animate-pulse-once');
+
+                localStorage.setItem('paq_pix_day_signed', 'true');
+            }
+        }
+
+        window.addEventListener('load', () => {
+            if(localStorage.getItem('paq_pix_day_signed') === 'true') {
+                document.getElementById('lead-form-container').classList.add('hidden');
+                document.getElementById('pix-display-container').classList.remove('hidden');
+            }
+        });
+
+        // --- 2. LÓGICA DE COPIAR PIX ---
+        const pixCode = "00020126580014BR.GOV.BCB.PIX013643.213.521/0001-305204000053039865802BR5925PROTOTIPANDO A QUEBRADA6012FLORIANOPOLIS62070503***63041D3D";
+
+        function copyPix() {
+            navigator.clipboard.writeText(pixCode).then(() => {
+                const btn = document.getElementById('copy-btn');
+                const originalContent = btn.innerHTML;
+                
+                btn.classList.remove('bg-paqBlue', 'text-white');
+                btn.classList.add('bg-white', 'text-black', 'border-white');
+                btn.innerHTML = `<i class="fa-solid fa-check-circle"></i> <span>COPIADO!</span>`;
+                
+                setTimeout(() => {
+                    btn.classList.add('bg-paqBlue', 'text-white');
+                    btn.classList.remove('bg-white', 'text-black', 'border-white');
+                    btn.innerHTML = originalContent;
+                }, 3000);
+            }).catch(err => {
+                alert('Copie a chave CNPJ: 43.213.521/0001-30');
+            });
+        }
+
+        // --- 3. CONTAGEM REGRESSIVA ---
+        function updateCountdown() {
+            const now = new Date();
+            const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+            const diff = endOfDay - now;
+
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown').innerText = 
+                `${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
+        }
+        
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+</body>
+</html>
